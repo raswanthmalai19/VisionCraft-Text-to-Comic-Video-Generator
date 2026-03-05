@@ -1,180 +1,188 @@
-# 🎨 VisionCraft — Text to Comic & Video Generator
+# VisionCraft: Text-to-Comic-Video-Generator
 
-Transform stories into stunning **comic strips** and **animated videos** using AI-powered text-to-image generation and semantic NLP.
+Transform your stories into stunning visual comic strips and animated videos using AI.
+
+## Overview
+
+**VisionCraft** is an intelligent storytelling tool that converts text narratives into:
+- **Comic strips** — Multi-panel manga-style illustrations
+- **Animated videos** — Cinematic scenes with Ken Burns motion effects
+
+Powered by Stable Diffusion v1.5, advanced NLP, and semantic understanding.
 
 ## Features
 
-- **📖 Story to Comic:** Convert any story into a multi-panel comic strip with intelligent scene segmentation
-- **🎬 Story to Video:** Generate animated videos with consistent character appearance and smooth Ken Burns effects
-- **🤖 Advanced NLP:** Semantic chunking, character extraction, entity recognition
-- **🎨 Stable Diffusion v1.5:** State-of-the-art diffusion model for high-quality image generation
-- **🚀 Web Interface:** Beautiful Flask-based UI with real-time generation
-- **💾 Multiple Fallbacks:** Graceful degradation when models or hardware are unavailable
+✨ **AI-Powered Image Generation** — Uses Stable Diffusion for photorealistic and stylized art  
+📖 **Smart Story Parsing** — Semantic chunking groups related sentences into cohesive scenes  
+🎬 **Video Animation** — Ken Burns effects with smooth crossfades between scenes  
+🎨 **Multiple Art Styles** — Manga, realistic, anime, comic art modes  
+🚀 **GPU & CPU Support** — Automatic detection and fallback optimization  
+⚡ **Lazy Model Loading** — Models load on-demand to minimize startup time  
+
+## Project Structure
+
+```
+.
+├── main.py                      # Flask web server & REST API
+├── comic_generator.py           # NLP pipeline & SD image generation for comics
+├── video_generator.py           # Scene extraction & video assembly with Ken Burns
+├── templates/
+│   └── index.html              # Single-page frontend interface
+├── output/                      # Generated comic PNGs (gitignored)
+├── video_output/               # Generated MP4s (gitignored)
+├── svd_env/                    # Python virtual environment (gitignored)
+├── docs/                       # Comprehensive documentation
+│   ├── README.md              # Project overview
+│   ├── project_structure.md   # Every file & folder explained
+│   ├── architecture.md        # System design & data flow
+│   ├── ai_models_and_concepts.md  # 15 AI/ML deep dives
+│   ├── comic_generator_deep_dive.md
+│   ├── video_generator_deep_dive.md
+│   ├── web_interface.md       # API reference
+│   └── study_guide.md         # Recommended reading order
+└── .gitignore
+```
 
 ## Quick Start
+
+### Prerequisites
+- Python 3.10+
+- 8GB+ VRAM recommended (GPU) or 16GB+ RAM (CPU)
+- CUDA 11.8+ (optional, for GPU acceleration)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/VisionCraft.git
-   cd VisionCraft
+   git clone https://github.com/raswanthmalai19/VisionCraft-Text-to-Comic-Video-Generator.git
+   cd VisionCraft-Text-to-Comic-Video-Generator
    ```
 
-2. **Create a virtual environment**
+2. **Create virtual environment**
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python3 -m venv svd_env
+   source svd_env/bin/activate  # On Windows: svd_env\Scripts\activate
    ```
 
 3. **Install dependencies**
    ```bash
-   pip install -r requirements.txt
+   pip install flask torch torchvision diffusers transformers sentence-transformers nltk pillow opencv-python numpy scikit-learn
    ```
 
-4. **Download NLTK data**
-   ```bash
-   python -c "import nltk; nltk.download('punkt_tab'); nltk.download('averaged_perceptron_tagger'); nltk.download('maxent_ne_chunker')"
-   ```
-
-5. **Run the application**
+4. **Run the server**
    ```bash
    python main.py
    ```
-   
-   The Flask server starts at `http://localhost:5000`
 
-### CLI Mode
+5. **Open in browser**
+   ```
+   http://localhost:5000
+   ```
 
-Generate a comic directly from the terminal:
+### Usage
+
+**Via Web UI (Recommended):**
+- Enter a story (or use examples)
+- Select art style/theme
+- Click "Generate Comic" or "Generate Video"
+- Download the output
+
+**Via CLI:**
 ```bash
 python main.py cli
 ```
 
-## Project Structure
+## Technology Stack
 
-```
-VisionCraft/
-├── main.py                    # Flask web server & API routes
-├── comic_generator.py         # Comic generation pipeline (NLP + SD)
-├── video_generator.py         # Video generation & animation
-├── templates/
-│   └── index.html            # Frontend web interface
-├── docs/                     # Comprehensive documentation
-│   ├── README.md             # Project overview
-│   ├── architecture.md        # System design & data flow
-│   ├── ai_models_and_concepts.md  # Deep dive into all models
-│   ├── comic_generator_deep_dive.md
-│   └── video_generator_deep_dive.md
-├── requirements.txt          # Python dependencies
-├── .gitignore               # Git exclusions
-└── output/                  # Generated comics (gitignored)
-```
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **Image Generation** | Stable Diffusion v1.5 | Core AI model for text-to-image |
+| **Text Understanding** | NLTK, Sentence-Transformers | NLP & semantic similarity |
+| **Summarization** | BART Large CNN | Scene description generation |
+| **Web Framework** | Flask | REST API & static content serving |
+| **Video Processing** | OpenCV | Frame assembly & Ken Burns effects |
+| **Deep Learning** | PyTorch | Tensor computation & GPU acceleration |
 
-## How It Works
+## Key Concepts
 
-### Comic Generation
-1. **Semantic Analysis** → Break story into meaningful chunks
-2. **Character Extraction** → Identify main characters and settings
-3. **Prompt Engineering** → Create optimized SD prompts
-4. **Image Generation** → Run Stable Diffusion for each panel
-5. **Layout Assembly** → Arrange panels into comic pages
-6. **Output** → Return as PNG grid
+### Semantic Chunking
+Stories are broken into panels by finding semantically similar sentences (using cosine similarity on embeddings). Sentences about the same action/scene are grouped together.
 
-### Video Generation
-1. **Scene Extraction** → Divide story into distinct scenes
-2. **Character Consistency** → Build character anchor strings
-3. **Prompt Crafting** → 9-part structured prompts
-4. **Image Synthesis** → Generate 3 motion variations per scene
-5. **Animation Effects** → Apply Ken Burns zoom/pan
-6. **Video Assembly** → OpenCV video encoding with fallbacks
+### Character Consistency (Video)
+A "character anchor" string (e.g., "adult male, brown hair, blue shirt") is injected into every video frame prompt. The SD seed is based on character description, not scene index — ensuring the same character looks similar across scenes.
 
-## API Endpoints
+### Water Safety System
+To prevent SD from generating sea monsters for water-themed stories, the system:
+1. Detects water keywords ("ocean", "sea", "lake")
+2. Rephrases to safe alternatives ("coastal shoreline background")
+3. Includes 30+ creature terms in the negative prompt
+
+### Ken Burns Effect
+Applies a slow zoom + pan motion to still images over 2 seconds (50 frames at 25 FPS), creating cinematic video motion.
+
+## Learning Resources
+
+📖 **Full Documentation** — See `/docs/` for comprehensive guides:
+- Start with `study_guide.md` for a recommended reading order
+- `architecture.md` for system design
+- `*_deep_dive.md` files for code walkthroughs
+- `ai_models_and_concepts.md` for educational reference
+
+## Troubleshooting
+
+**Sea monsters in ocean scenes?**
+→ Increase negative prompt weight or use "coastal shoreline" phrasing
+
+**Generation is slow?**
+→ Running on CPU. Install CUDA for GPU acceleration (~10× faster)
+
+**Out of memory?**
+→ Enable VAE slicing (already done). On larger systems, use `guidance_scale=9.5` for higher quality.
+
+**Videos not generating?**
+→ Check OpenCV codec support. System falls back through mp4v → XVID → MJPG automatically.
+
+## API Reference
 
 ### POST `/generate`
-Generate a comic from a story.
+Generate a comic strip from a story.
 ```json
 {
-  "story": "Once upon a time...",
+  "story": "Luna found the ancient key...",
   "theme": "manga"
 }
 ```
+Returns: Array of base64-encoded PNG images
 
 ### POST `/generate_video`
-Generate an animated video.
+Generate an animated video from a story.
 ```json
 {
-  "story": "Once upon a time...",
+  "story": "Luna found the ancient key...",
   "style": "cinematic"
 }
 ```
-
-### GET `/output/<filename>`
-Retrieve a generated comic image.
-
-### GET `/video_output/<filename>`
-Retrieve a generated video file.
-
-## Technologies
-
-| Category | Technology |
-|----------|-----------|
-| Image Generation | Stable Diffusion v1.5 |
-| NLP | NLTK, Sentence-Transformers, BART |
-| Video | OpenCV, PIL |
-| Web | Flask |
-| Deep Learning | PyTorch, Transformers |
-| Similarity | scikit-learn (TF-IDF, Cosine) |
-
-## Detailed Documentation
-
-For in-depth explanations of every concept, model, and function:
-
-- 📚 [Project Structure](docs/project_structure.md)
-- 🏗️ [Architecture & Data Flow](docs/architecture.md)
-- 🧠 [AI Models & Concepts](docs/ai_models_and_concepts.md) — 15 deep-dive sections
-- 💻 [Comic Generator Breakdown](docs/comic_generator_deep_dive.md)
-- 🎬 [Video Generator Breakdown](docs/video_generator_deep_dive.md)
-- 🌐 [Web Interface Reference](docs/web_interface.md)
-- 📖 [Study Guide](docs/study_guide.md) — Recommended reading order
-
-## Hardware Requirements
-
-| Component | Minimum | Recommended |
-|-----------|---------|------------|
-| CPU | 4 cores | 8+ cores |
-| RAM | 8 GB | 16+ GB |
-| GPU | None (CPU works) | RTX 2060+ or better |
-| Storage | 20 GB | 50 GB |
-
-**Note:** GPU acceleration is highly recommended. Generation on CPU takes 5-10 minutes per image; on GPU (RTX 3050 Ti): 20-30 seconds.
-
-## Common Issues & Solutions
-
-### "Sea monsters" appearing near beaches
-→ The Water Word Safety system rephrases `"ocean"` to `"coastal shoreline"` to prevent SD from generating creatures. In edge cases, comprehensive negative prompts also help.
-
-### Character looks different in each video frame
-→ Use the character anchor system (automatically applied) to maintain consistency. Character seed is based on `hash(character_name + description)`, not scene index.
-
-### Out of memory errors on GPU
-→ Models use automatic attention slicing and VAE slicing to reduce VRAM. For GPUs < 4GB, run on CPU or reduce inference steps.
-
-### Generation is very slow
-→ On CPU, Stable Diffusion needs 25-35 denoising steps per image. This is normal. Consider using a GPU or reducing `num_inference_steps` to 20.
+Returns: Path to MP4 file
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions welcome! Areas for enhancement:
+- Additional art styles
+- Multi-character consistency improvements
+- Faster model optimization
+- Extended language support
 
 ## License
 
-MIT License — see LICENSE file for details.
+MIT License — See LICENSE file for details
 
 ## Author
 
-Created as a comprehensive AI-powered storytelling tool combining advanced NLP and generative AI.
+Created by raswanthmalai19
 
----
+## Acknowledgments
 
-**For detailed technical documentation, see the [docs/](docs/) folder.**
+- **Stable Diffusion** by RunwayML
+- **NLTK** by NLTK Project
+- **Transformers** by Hugging Face
+- **PyTorch** by Meta

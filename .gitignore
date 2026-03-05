@@ -1,65 +1,45 @@
-# Python virtual environments
+# Virtual Environment
+svd_env/
 venv/
 env/
 ENV/
-svd_env/
-.venv
-pip-log.txt
-pip-delete-this-directory.txt
+.venv/
 
-# Python compiled files
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 *.so
-*.egg
+.Python
 *.egg-info/
 dist/
 build/
-.eggs/
+*.egg
 
-# IDE and editor files
+# IDE & Editor
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
-*.sublime-project
-*.sublime-workspace
 
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Generated output files
+# Project-specific
 output/
 video_output/
 *.mp4
 *.avi
 *.mov
-*.png
-*.jpg
-*.jpeg
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-*.ipynb
+# Environment variables
+.env
+.env.local
 
-# Model cache and downloads
-models/
-*.bin
-*.safetensors
-*.ckpt
-
-# OS files
+# OS
 .DS_Store
 Thumbs.db
-.AppleDouble
-.LSOverride
 
-# Misc
-*.log
+# Temporary files
+*.tmp
+*.temp
 .cache/
