@@ -1,76 +1,65 @@
-# Virtual Environment
-svd_env/
+# Python virtual environments
 venv/
 env/
 ENV/
-.venv/
+svd_env/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Python compiled files
 __pycache__/
-
-# Python
-*.py[cod]
-*$py.class
+*.pyc
+*.pyo
+*.pyd
 *.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
 *.egg
-MANIFEST
+*.egg-info/
+dist/
+build/
+.eggs/
 
-# IDE & Editor
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables
 .env
 .env.local
+.env.*.local
 
-# Output & Generated Files
+# Generated output files
 output/
 video_output/
 *.mp4
 *.avi
+*.mov
 *.png
 *.jpg
 *.jpeg
-*.gif
-*.webp
-*.webm
-temp/
-tmp/
-cache/
-.cache/
 
-# Flask
-instance/
-.webassets-cache
-*.log
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
 
-# PyCharm
-.pytest_cache/
-.coverage
-htmlcov/
+# Model cache and downloads
+models/
+*.bin
+*.safetensors
+*.ckpt
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
+.AppleDouble
+.LSOverride
 
-# Development
-.ipynb_checkpoints
-*.ipynb
-debug.log
+# Misc
+*.log
+.cache/
