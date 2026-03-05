@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> VisionCraft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-section label {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .story-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .story-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .theme-selector {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .theme-selector:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .theme-preview {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .video-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .video-section h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .video-btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            margin-top: 15px;
+        }
+
+        .video-btn:hover {
+            background: linear-gradient(45deg, #ff5252, #ff9f43);
+        }
+
+        .video-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #333;
+        }
+
+        .video-player {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .comic-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+
+        .error {
+            background: #ffebee;
+            border: 1px solid #ef5350;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .success {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .story-analysis {
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #b3d9ff;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .page-container {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .page-container h4 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .download-all-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 8px;
+        }
+
+        .download-all-btn {
+            background: #2196F3 !important;
+            font-size: 16px !important;
+            padding: 12px 30px !important;
+        }
+
+        .download-all-btn:hover {
+            background: #1976D2 !important;
+        }
+
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #45a049;
+        }
+
+        .example-stories {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .example-stories h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .example-item {
+            background: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .example-item:hover {
+            background: #e3f2fd;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        .error-suggestions {
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .error-suggestions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .error-suggestions li {
+            margin: 8px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VisionCraft</h1>
+            <p>Text to Comic generator</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <label for="storyInput">📝 Enter Your Story:</label>
+                <textarea 
+                    id="storyInput" 
+                    class="story-input" 
+                    placeholder="Write your story here - it can be as short as a few sentences for comics or longer and more detailed for video generation! The system will intelligently break it down into panels or scenes. For example: 'Once upon a time, there was a brave knight who discovered a magical sword in an ancient cave. The sword glowed with mysterious power and whispered ancient secrets. He faced a terrible dragon that terrorized the kingdom for centuries. Using the magical sword's power, he defeated the beast in an epic battle. The kingdom was saved and the people celebrated their hero throughout the land.' Use Ctrl+Enter for comics, Shift+Enter for videos!"
+                ></textarea>
+            </div>
+
+            <div class="input-section">
+                <label for="themeSelector">🎨 Choose Comic Theme:</label>
+                <select id="themeSelector" class="theme-selector" onchange="updateThemePreview()">
+                    <option value="classic">🦸 Classic Comic Book</option>
+                    <option value="manga">🇯🇵 Manga/Anime Style</option>
+                    <option value="superhero">⚡ Superhero Comic</option>
+                    <option value="cartoon">😊 Cartoon Style</option>
+                    <option value="noir">🔍 Film Noir</option>
+                    <option value="fantasy">🧙 Fantasy Adventure</option>
+                    <option value="scifi">🚀 Science Fiction</option>
+                    <option value="webcomic">💻 Modern Web Comic</option>
+                </select>
+                <div id="themePreview" class="theme-preview">
+                    Classic comic book style with clean lines, high contrast, and bold colors
+                </div>
+            </div>
+
+            <button id="generateBtn" class="generate-btn" onclick="generateComic()">
+                🚀 Generate Comic
+            </button>
+
+            <!-- Video Generation Section -->
+            <div class="video-section">
+                <h3>🎬 Or Generate a Video Story</h3>
+                <div class="input-section">
+                    <label for="videoStyleSelector">🎭 Video Style:</label>
+                    <select id="videoStyleSelector" class="theme-selector">
+                        <option value="cinematic">🎬 Cinematic</option>
+                        <option value="animated">🎨 Animated</option>
+                        <option value="realistic">📷 Realistic</option>
+                        <option value="artistic">🖼️ Artistic</option>
+                    </select>
+                </div>
+                <button id="generateVideoBtn" class="generate-btn video-btn" onclick="generateVideo()">
+                    🎥 Generate Video Story
+                </button>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <div id="loading-text" class="loading-text">Creating your comic strip... This may take 5-10 minutes for longer stories. Please wait!</div>
+            </div>
+
+            <div id="result" class="result-section"></div>
+
+            <div class="example-stories">
+                <h3>💡 Example Stories (Click to use):</h3>
+                <div class="example-item" onclick="useExample(this)">
+                    A young wizard discovered a mysterious book in the library. The book contained powerful spells. She cast a spell and flowers bloomed everywhere. The whole town was amazed by her magic.
+                </div>
+                <div class="example-item" onclick="useExample(this)">
+                    A robot landed on an alien planet. Strange creatures welcomed the visitor. They shared their advanced technology. The robot returned home with new knowledge.
+                </div>
+                <div class="example-item" onclick="useExample(this)">
+                    A detective found a cryptic note. The clue led to an abandoned mansion. Inside, she discovered a hidden treasure room. The mystery was finally solved.
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        const themeDescriptions = {
+            'classic': 'Classic comic book style with clean lines, high contrast, and bold colors',
+            'manga': 'Japanese manga and anime art style with detailed line work',
+            'superhero': 'Dynamic superhero comic style with bold action and heroic poses',
+            'cartoon': 'Colorful cartoon style with friendly characters and simple lines',
+            'noir': 'Film noir style with dramatic black and white contrast and shadows',
+            'fantasy': 'Fantasy adventure style with magical elements and epic backgrounds',
+            'scifi': 'Futuristic science fiction style with cyberpunk and technology themes',
+            'webcomic': 'Modern digital webcomic style with clean vector art'
+        };
+
+        function updateThemePreview() {
+            const selector = document.getElementById('themeSelector');
+            const preview = document.getElementById('themePreview');
+            const selectedTheme = selector.value;
+            preview.textContent = themeDescriptions[selectedTheme] || 'Select a theme to see description';
+        }
+
+        function useExample(element) {
+            document.getElementById('storyInput').value = element.textContent.trim();
+        }
+
+        async function generateComic() {
+            const story = document.getElementById('storyInput').value.trim();
+            const theme = document.getElementById('themeSelector').value;
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+
+            if (!story) {
+                result.innerHTML = '<div class="error">❌ Please enter a story first!</div>';
+                return;
+            }
+
+            // Reset UI
+            result.innerHTML = '';
+            generateBtn.disabled = true;
+            generateBtn.textContent = '⏳ Generating...';
+            loading.style.display = 'block';
+
+            try {
+                // Add timeout for long comic generation (10 minutes)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 600000); // 10 minutes
+                
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        story: story,
+                        theme: theme
+                    }),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+                const data = await response.json();
+
+                if (data.success) {
+                    let pageHtml = `<div class="success">✅ ${data.theme || 'Comic'} generated successfully!</div>`;
+                    
+                    if (data.pages > 1) {
+                        pageHtml += `
+                            <div class="story-analysis">
+                                📊 Generated ${data.panels} panels across ${data.pages} pages
+                                <br>
+                                📄 Multiple pages created with ${Math.floor(data.panels / data.pages)}-${Math.ceil(data.panels / data.pages)} panels each
+                            </div>`;
+                        
+                        // Display all pages
+                        data.images.forEach((image, index) => {
+                            pageHtml += `
+                                <div class="page-container">
+                                    <h4>Page ${index + 1} of ${data.pages}</h4>
+                                    <img src="data:image/png;base64,${image}" alt="Comic Page ${index + 1}" class="comic-image" />
+                                    <button class="download-btn" onclick="downloadImage('${image}', 'comic_page_${index + 1}.png')">
+                                        📥 Download Page ${index + 1}
+                                    </button>
+                                </div>`;
+                        });
+                        
+                        // Add download all button
+                        pageHtml += `
+                            <div class="download-all-container">
+                                <button class="download-btn download-all-btn" onclick="downloadAllPages(${JSON.stringify(data.images)})">
+                                    📦 Download All Pages
+                                </button>
+                            </div>`;
+                    } else {
+                        pageHtml += `
+                            <div class="story-analysis">
+                                📊 Generated ${data.panels} panels on 1 page
+                                <br>
+                                📝 Single page layout
+                            </div>
+                            <img src="data:image/png;base64,${data.images[0]}" alt="Generated Comic" class="comic-image" />
+                            <br>
+                            <button class="download-btn" onclick="downloadImage('${data.images[0]}', 'comic_strip.png')">
+                                📥 Download Comic
+                            </button>`;
+                    }
+                    
+                    result.innerHTML = pageHtml;
+                } else {
+                    result.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
+                }
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    result.innerHTML = `<div class="error">❌ Generation timed out. The story might be too long. Try a shorter story or refresh and try again.</div>`;
+                } else {
+                    result.innerHTML = `<div class="error">❌ Network error: ${error.message}. The comic may still be generating in the background.</div>`;
+                }
+            } finally {
+                // Reset button state
+                generateBtn.disabled = false;
+                generateBtn.textContent = '🚀 Generate Comic';
+                loading.style.display = 'none';
+            }
+        }
+
+        function downloadImage(base64Data, filename) {
+            const link = document.createElement('a');
+            link.href = 'data:image/png;base64,' + base64Data;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadAllPages(imagesArray) {
+            imagesArray.forEach((image, index) => {
+                setTimeout(() => {
+                    downloadImage(image, `comic_page_${index + 1}.png`);
+                }, index * 200); // Stagger downloads to avoid browser blocking
+            });
+        }
+
+        // Video generation function
+        async function generateVideo() {
+            const story = document.getElementById('storyInput').value.trim();
+            const style = document.getElementById('videoStyleSelector').value;
+            const result = document.getElementById('result');
+            const loading = document.getElementById('loading');
+            const loadingText = document.getElementById('loading-text');
+            const generateVideoBtn = document.getElementById('generateVideoBtn');
+
+            if (!story) {
+                result.innerHTML = '<div class="error">❌ Please enter a story first!</div>';
+                return;
+            }
+
+            if (story.split(' ').length < 20) {
+                result.innerHTML = '<div class="error">❌ Story too short for video generation. Please provide a longer, more detailed story (at least 20 words).</div>';
+                return;
+            }
+
+            // Show loading state
+            generateVideoBtn.disabled = true;
+            generateVideoBtn.textContent = '⏳ Generating Video...';
+            loading.style.display = 'block';
+            loadingText.textContent = 'Analyzing story with AI and creating video in fast mode... This should take 5-15 minutes. Speed optimizations: 720p resolution, 25 inference steps, 2 variations per scene!';
+            result.innerHTML = '';
+
+            try {
+                // Reduced timeout for fast generation (20 minutes)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 1200000); // 20 minutes
+                
+                // Update progress message every 2 minutes
+                const progressInterval = setInterval(() => {
+                    const progressMessages = [
+                        'AI is analyzing your story structure...',
+                        'Extracting characters and settings for consistency...',
+                        'Generating high-quality images with Stable Diffusion...',
+                        'Creating scene variations and camera movements...',
+                        'Applying motion effects and transitions...',
+                        'Finalizing video composition and encoding...'
+                    ];
+                    const randomMessage = progressMessages[Math.floor(Math.random() * progressMessages.length)];
+                    loadingText.textContent = `${randomMessage} Please wait, this creates professional-quality videos!`;
+                }, 120000); // Update every 2 minutes
+                
+                const response = await fetch('/generate_video', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        story: story,
+                        style: style
+                    }),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+                clearInterval(progressInterval);
+                const data = await response.json();
+
+                console.log('Video generation response:', data);
+
+                if (data.success) {
+                    console.log('Video path:', data.video_path);
+                    console.log('Video filename:', data.video_filename);
+                    
+                    // Test if video URL is accessible
+                    console.log('Testing video URL accessibility...');
+                    fetch(data.video_path, { method: 'HEAD' })
+                        .then(response => {
+                            console.log('Video URL test - Status:', response.status, 'Headers:', [...response.headers.entries()]);
+                            if (!response.ok) {
+                                console.error('Video URL not accessible:', response.status, response.statusText);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Video URL test failed:', error);
+                        });
+                    
+                    result.innerHTML = `
+                        <div class="video-result">
+                            <div class="success">✅ Video generated successfully!</div>
+                            <div class="story-analysis">
+                                📊 Created video with ${data.num_scenes} scenes
+                                <br>
+                                ⏱️ Estimated duration: ${data.duration_estimate}
+                                <br>
+                                🎬 Style: ${style.charAt(0).toUpperCase() + style.slice(1)}
+                                <br>
+                                📁 Video file: ${data.video_filename}
+                            </div>
+                            <video class="video-player" controls preload="metadata" style="width: 100%; max-width: 600px; border: 1px solid #ddd;" 
+                                   onloadstart="console.log('Video load started for:', this.src)"
+                                   oncanplay="console.log('Video can play - Duration:', this.duration)"
+                                   oncanplaythrough="console.log('Video can play through - Ready to stream')"
+                                   onerror="console.error('Video error:', this.error); console.log('Error code:', this.error ? this.error.code : 'unknown'); this.style.border='2px solid red'; this.style.background='#ffe6e6';"
+                                   onloadedmetadata="console.log('Video metadata loaded - Duration:', this.duration, 'Size:', this.videoWidth + 'x' + this.videoHeight)"
+                                   onprogress="console.log('Video loading progress...')"
+                                   onsuspend="console.log('Video loading suspended')"
+                                   onstalled="console.log('Video loading stalled')"
+                                   onwaiting="console.log('Video waiting for data')"
+                                   onplay="console.log('Video started playing')"
+                                   onpause="console.log('Video paused')">
+                                <source src="${data.video_path}" type="video/mp4">
+                                <source src="${data.video_path}" type="video/webm">
+                                <source src="${data.video_path}" type="video/ogg">
+                                <p style="color: red;">Your browser does not support the video tag. <a href="${data.video_path}" target="_blank">Download the video</a></p>
+                            </video>
+                            <br>
+                            <div style="margin-top: 10px;">
+                                <button class="download-btn" onclick="window.open('${data.video_path}', '_blank')">
+                                    📥 Download Video
+                                </button>
+                                <button class="download-btn" onclick="testVideoUrl('${data.video_path}')">
+                                    🔍 Test Video URL
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
+                }
+            } catch (error) {
+                clearInterval(progressInterval);
+                if (error.name === 'AbortError') {
+                    result.innerHTML = `<div class="error">⏰ Video generation timed out after 40 minutes. Your story might be very complex or the system is under heavy load. Try:</div>
+                    <div class="error-suggestions">
+                        <ul>
+                            <li>🔄 Refresh and try again (server might be busy)</li>
+                            <li>✂️ Use a shorter, simpler story</li>
+                            <li>⏳ Try again during off-peak hours</li>
+                        </ul>
+                    </div>`;
+                } else {
+                    result.innerHTML = `<div class="error">❌ Network error: ${error.message}. The video may still be generating in the background.</div>`;
+                }
+            } finally {
+                clearInterval(progressInterval);
+                // Reset button state
+                generateVideoBtn.disabled = false;
+                generateVideoBtn.textContent = '🎥 Generate Video Story';
+                loading.style.display = 'none';
+            }
+        }
+
+        // Test video URL function
+        function testVideoUrl(videoPath) {
+            console.log('Testing video URL:', videoPath);
+            fetch(videoPath)
+                .then(response => {
+                    console.log('Video URL response:', response.status, response.statusText);
+                    console.log('Response headers:', response.headers);
+                    return response.blob();
+                })
+                .then(blob => {
+                    console.log('Video blob size:', blob.size, 'Type:', blob.type);
+                    if (blob.size > 0) {
+                        alert(`Video accessible! Size: ${(blob.size / 1024 / 1024).toFixed(2)} MB`);
+                    } else {
+                        alert('Video file is empty or inaccessible');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error accessing video:', error);
+                    alert('Error accessing video: ' + error.message);
+                });
+        }
+
+        // Allow Enter key in textarea but Ctrl+Enter to generate
+        document.getElementById('storyInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                generateComic();
+            } else if (e.shiftKey && e.key === 'Enter') {
+                generateVideo();
+            }
+        });
+
+        // Test video URL function
+        function testVideoUrl(videoPath) {
+            console.log('Testing video URL:', videoPath);
+            fetch(videoPath, { method: 'HEAD' })
+                .then(response => {
+                    console.log('Video URL status:', response.status, response.statusText);
+                    if (response.ok) {
+                        alert('✅ Video URL is accessible! Status: ' + response.status);
+                    } else {
+                        alert('❌ Video URL not accessible. Status: ' + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error('Video URL test failed:', error);
+                    alert('❌ Video URL test failed: ' + error.message);
+                });
+        }
+    </script>
+</body>
+</html>
