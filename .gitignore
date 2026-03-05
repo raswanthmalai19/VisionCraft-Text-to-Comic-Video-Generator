@@ -24,8 +24,10 @@ build/
 *~
 .DS_Store
 
-# Project-specific
-output/
+# Documentation
+docs/
+
+# Video Output (too large for GitHub)
 video_output/
 *.mp4
 *.avi
